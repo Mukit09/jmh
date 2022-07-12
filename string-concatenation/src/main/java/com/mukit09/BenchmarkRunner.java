@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 public class BenchmarkRunner {
     private static final int TOTAL_STRING = 100_000;
-    private static List<String> list = new ArrayList<>();
+    private static List<String> randomStringList = new ArrayList<>();
 
     static {
         var random = new Random();
         for (var i = 0; i < TOTAL_STRING; i++) {
-            list.add(getRandomString(random));
+            randomStringList.add(getRandomString(random));
         }
     }
 
@@ -23,7 +23,7 @@ public class BenchmarkRunner {
     @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
     public void doBenchMarkOfPlusOperator() {
-        int len = concatWithPlusOperator(list);
+        int len = concatWithPlusOperator(randomStringList);
     }
 
     @Fork(value = 10, warmups = 5)
@@ -31,7 +31,7 @@ public class BenchmarkRunner {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @BenchmarkMode(Mode.AverageTime)
     public void doBenchMarkOfStringBuilder() {
-        int len = concatWithStringBuilder(list);
+        int len = concatWithStringBuilder(randomStringList);
     }
 
     private static String getRandomString(Random random) {
