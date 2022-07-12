@@ -23,7 +23,7 @@ public class BenchmarkRunner {
     @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
     public void doBenchMarkOfPlusOperator() {
-        concatWithPlusOperator(list);
+        int len = concatWithPlusOperator(list);
     }
 
     @Fork(value = 10, warmups = 5)
@@ -31,7 +31,7 @@ public class BenchmarkRunner {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @BenchmarkMode(Mode.AverageTime)
     public void doBenchMarkOfStringBuilder() {
-        concatWithStringBuilder(list);
+        int len = concatWithStringBuilder(list);
     }
 
     private static String getRandomString(Random random) {
@@ -46,17 +46,17 @@ public class BenchmarkRunner {
                 .toString();
     }
 
-    private void concatWithPlusOperator(List<String> list) {
+    private int concatWithPlusOperator(List<String> list) {
         var string = "";
         for (var i = 0;i<list.size(); i++)
             string += list.get(i);
-        System.out.println(string.length());
+        return string.length();
     }
 
-    private void concatWithStringBuilder(List<String> list) {
+    private int concatWithStringBuilder(List<String> list) {
         var stringBuilder = new StringBuilder();
         for (var i = 0;i<list.size(); i++)
             stringBuilder.append(list.get(i));
-        System.out.println(stringBuilder.toString().length());
+        return stringBuilder.length();
     }
 }
