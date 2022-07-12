@@ -45,12 +45,14 @@ public class BenchmarkRunner {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
     }
+
     private void concatWithPlusOperator(List<String> list) {
         var string = "";
         for (var i = 0;i<list.size(); i++)
             string += list.get(i);
         System.out.println(string.length());
     }
+
     private void concatWithStringBuilder(List<String> list) {
         var stringBuilder = new StringBuilder();
         for (var i = 0;i<list.size(); i++)
