@@ -5,11 +5,12 @@ import org.openjdk.jmh.annotations.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 public class BenchmarkRunner {
     private static final int TOTAL_STRING = 100_000;
-    private static List<String> randomStringList = new ArrayList<>();
+    private static final List<String> randomStringList = new ArrayList<>();
 
     static {
         var random = new Random();
@@ -20,10 +21,10 @@ public class BenchmarkRunner {
 
     @Fork(value = 10, warmups = 5)
     @Benchmark
-    @OutputTimeUnit(TimeUnit.SECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @BenchmarkMode(Mode.AverageTime)
     public void doBenchMarkOfPlusOperator() {
-        int len = concatWithPlusOperator(randomStringList);
+        int len = concatWithPlusOperator();
     }
 
     @Fork(value = 10, warmups = 5)
@@ -31,7 +32,23 @@ public class BenchmarkRunner {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @BenchmarkMode(Mode.AverageTime)
     public void doBenchMarkOfStringBuilder() {
-        int len = concatWithStringBuilder(randomStringList);
+        int len = concatWithStringBuilder();
+    }
+
+    @Fork(value = 10, warmups = 5)
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @BenchmarkMode(Mode.AverageTime)
+    public void doBenchMarkOfStringJoiner() {
+        int len = concatWithStringJoiner();
+    }
+
+    @Fork(value = 10, warmups = 5)
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @BenchmarkMode(Mode.AverageTime)
+    public void doBenchMarkOfStringJoin() {
+        int len = concatWithStringJoin();
     }
 
     private static String getRandomString(Random random) {
@@ -46,17 +63,29 @@ public class BenchmarkRunner {
                 .toString();
     }
 
-    private int concatWithPlusOperator(List<String> list) {
+    private int concatWithPlusOperator() {
         var string = "";
-        for (var i = 0;i<list.size(); i++)
-            string += list.get(i);
+        for (var i = 0;i<randomStringList.size(); i++)
+            string += randomStringList.get(i) + ",";
         return string.length();
     }
 
-    private int concatWithStringBuilder(List<String> list) {
+    private int concatWithStringBuilder() {
         var stringBuilder = new StringBuilder();
-        for (var i = 0;i<list.size(); i++)
-            stringBuilder.append(list.get(i));
-        return stringBuilder.length();
+        for (var i = 0;i<randomStringList.size(); i++)
+            stringBuilder.append(randomStringList.get(i)).append(",");
+        return stringBuilder.toString().length();
+    }
+
+    private int concatWithStringJoiner() {
+        var stringJoiner = new StringJoiner(",");
+        for (String string : randomStringList)
+            stringJoiner.add(string);
+        return stringJoiner.toString().length();
+    }
+
+    private int concatWithStringJoin() {
+        var string = String.join(",", randomStringList);
+        return string.length();
     }
 }
