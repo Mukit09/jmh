@@ -79,7 +79,7 @@ public class BenchmarkRunner {
 
     private int concatWithStringJoiner() {
         var stringJoiner = new StringJoiner(",");
-        for (String string : randomStringList)
+        for (var string : randomStringList)
             stringJoiner.add(string);
         return stringJoiner.toString().length();
     }
